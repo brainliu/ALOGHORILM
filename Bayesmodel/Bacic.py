@@ -4,6 +4,7 @@
 # file: Bacic.py
 #location: china chengdu 610000
 import numpy as np
+import  time
 #定义朴素贝叶模型的基类
 class NativaBsyes:
     """
@@ -70,7 +71,7 @@ import numpy as np
 from math import pi,exp
 sqrt_pi=(2*pi)**0.5
 class NBFunctions:
-    #定义正太分布的密度函数
+    #定义正太分布的密度函数import time
     @staticmethod
     def gaussian(x,mu,sigma):
         return exp(-(x-mu)**2/ (2*sigma**2))/(sqrt_pi*sigma)

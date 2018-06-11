@@ -69,25 +69,25 @@ from pylab import mpl
 mpl.rcParams["font.sans-serif"]=['Fangsong']
 mpl.rcParams["axes.unicode_minus"]=False
 
-def plot_all(nb,dataset):
-    data=nb._data
-    colors={"不爆炸":"blue","爆炸":"red"}
-    #反字典化
-    _rev_feat_dics=[{_val:key for key ,_val in item.items()} for item in  nb._feat_dics]
-    for _j in range(nb._x.shape[1]):
-        sj=nb._n_possibilities[_j]
-        temp_x=np.arange(1,sj+1)
-        tittle="$j= {};s_j={}$".format(_j+1,sj)
-        plt.figure()
-        plt.title(tittle)
-        for _c in range(len(nb.label_dict)):
-            plt.bar(temp_x-0.35*_c,data[_j][_c,:],width=0.35, facecolor=colors[nb.label_dict[_c]],edgecolor="white"
-            ,label="class :{}".format(nb.label_dict[_c]))
-            plt.xticks([i for i in range(sj)], [""] + [_rev_feat_dics[_j]] + [""])
-            plt.ylim(0, 1.0)
-            plt.legend()
-            # 保存画好的图像
-            plt.savefig("d{0}，{1}.png".format(dataset,_j + 1))
+# def plot_all(nb,dataset):
+#     data=nb._data
+#     colors={"不爆炸":"blue","爆炸":"red"}
+#     #反字典化
+#     _rev_feat_dics=[{_val:key for key ,_val in item.items()} for item in  nb._feat_dics]
+#     for _j in range(nb._x.shape[1]):
+#         sj=nb._n_possibilities[_j]
+#         temp_x=np.arange(1,sj+1)
+#         tittle="$j= {};s_j={}$".format(_j+1,sj)
+#         plt.figure()
+#         plt.title(tittle)
+#         for _c in range(len(nb.label_dict)):
+#             plt.bar(temp_x-0.35*_c,data[_j][_c,:],width=0.35, facecolor=colors[nb.label_dict[_c]],edgecolor="white"
+#             ,label="class :{}".format(nb.label_dict[_c]))
+#             plt.xticks([i for i in range(sj)], [""] + [_rev_feat_dics[_j]] + [""])
+#             plt.ylim(0, 1.0)
+#             plt.legend()
+#             # 保存画好的图像
+#             plt.savefig("../result/d{0}，{1}.png".format(dataset,_j + 1))
 
 
 if __name__ == '__main__':
@@ -114,5 +114,5 @@ if __name__ == '__main__':
             )
         )
         print(" "*20)
-        plot_all(nb,dataset)
+        # plot_all(nb,dataset)
 
