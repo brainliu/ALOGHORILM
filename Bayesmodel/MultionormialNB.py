@@ -64,11 +64,39 @@ class MultinormialNB(NativaBsyes):
         for j, char in enumerate(x):
             x[j] = self._feat_dics[j][char]
         return x
+import matplotlib.pyplot as plt
+from pylab import mpl
+mpl.rcParams["font.sans-serif"]=['Fangsong']
+mpl.rcParams["axes.unicode_minus"]=False
+
+def plot_all(nb,dataset):
+    data=nb._data
+    colors={"不爆炸":"blue","爆炸":"red"}
+    #反字典化
+    _rev_feat_dics=[{_val:key for key ,_val in item.items()} for item in  nb._feat_dics]
+    for _j in range(nb._x.shape[1]):
+        sj=nb._n_possibilities[_j]
+        temp_x=np.arange(1,sj+1)
+        tittle="$j= {};s_j={}$".format(_j+1,sj)
+        plt.figure()
+        plt.title(tittle)
+        for _c in range(len(nb.label_dict)):
+            plt.bar(temp_x-0.35*_c,data[_j][_c,:],width=0.35, facecolor=colors[nb.label_dict[_c]],edgecolor="white"
+            ,label="class :{}".format(nb.label_dict[_c]))
+            plt.xticks([i for i in range(sj)], [""] + [_rev_feat_dics[_j]] + [""])
+            plt.ylim(0, 1.0)
+            plt.legend()
+            # 保存画好的图像
+            plt.savefig("d{0}，{1}.png".format(dataset,_j + 1))
+
+
 if __name__ == '__main__':
     import time
     from  Util.util import DataUtil
-    for dataset in ("balloon1.0","balloon1.5"):
-
+    for dataset in ["balloon1.0","balloon1.5"]:
+        print("="*20)
+        print(dataset)
+        print("-"*20)
         _X,_Y=DataUtil.get_dataset(dataset,"../data/{}.txt".format(dataset))
         learinning_time=time.time()
         nb=MultinormialNB()
@@ -76,3 +104,15 @@ if __name__ == '__main__':
         learinning_time=time.time()-learinning_time
         estiamtime=time.time()
         nb.evaluate(_X,_Y)
+        estiamtime=time.time()-estiamtime
+        #print output
+        print(
+            "model bulding: {:12.6}s\n"
+            "Estimation: {:12.6}s\n"
+            "Toatl ：{:12.6}".format(
+                learinning_time,estiamtime,learinning_time+estiamtime
+            )
+        )
+        print(" "*20)
+        plot_all(nb,dataset)
+

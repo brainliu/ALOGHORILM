@@ -66,4 +66,23 @@ class NativaBsyes:
     def evaluate(self,x,y):
         y_pred=self.predict(x)
         print("ACC: {:12.6}%".format(100*np.sum(y_pred==y)/len(y)))
+import numpy as np
+from math import pi,exp
+sqrt_pi=(2*pi)**0.5
+class NBFunctions:
+    #定义正太分布的密度函数
+    @staticmethod
+    def gaussian(x,mu,sigma):
+        return exp(-(x-mu)**2/ (2*sigma**2))/(sqrt_pi*sigma)
+    @staticmethod
+    def gauss_maximum_likehood(labeled_x,n_category,dim):
+        mu=[np.sum(
+            labeled_x[c][dim])/len(labeled_x[c][dim]) for c in range(n_category)
+        ]
+        sigma=[np.sum((labeled_x[c][dim]-mu[c])**2)/len(labeled_x[c][dim]) for c in range(n_category)]
 
+        def func(_c):
+            def sub(xx):
+                return NBFunctions.gaussian(xx,mu[_c],sigma[_c])
+            return sub
+        return [func(_c=c)for c in range(n_category)]
