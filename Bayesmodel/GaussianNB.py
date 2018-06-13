@@ -17,7 +17,7 @@ class GaussianNB(NativaBsyes):
         labeled_x=[x[label].T for label in labels] #相当于y有几类，就分成了几类x的数据
         #更新属性
         self._x,self._y=x.T,y
-        self._labeled_x,self._labeled_zip=labeled_x,labels
+        self._labelled_x,self._labeled_zip=labeled_x,labels
         self._cat_counter,self.label_dict=cat_counter,{i:_l for _l,i in label_dic.items()}
         self.feed_sample_weight(sample_weight)
     #定义处理样本的权重函数
@@ -25,7 +25,7 @@ class GaussianNB(NativaBsyes):
         if sample_weight is not None:
             loca_weigths=sample_weight*len(sample_weight)
             for i,label in enumerate(self._labeled_zip):
-                self._labeled_x[i]*=loca_weigths[label]
+                self._labelled_x[i]*=loca_weigths[label]
 
     def _fit(self,lb):
         n_category=len(self._cat_counter)
@@ -33,7 +33,7 @@ class GaussianNB(NativaBsyes):
         #利用极大释然函数计算条件概率的函数，用数组变量进行保存
         data=[
             NBFunctions.gauss_maximum_likehood(
-                self._labeled_x,n_category,dim
+                self._labelled_x,n_category,dim
             ) for dim in range(len(self._x))
         ]
         self._data=data

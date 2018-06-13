@@ -46,6 +46,7 @@ class NativaBsyes:
     def predict_one(self,x,get_raw_result=False):
         if isinstance(x,np.ndarray):
             x=x.tolist()
+
         else:
             x=x[:]
         x=self._transfer(x)
@@ -56,6 +57,7 @@ class NativaBsyes:
                 m_arg, m_probability = i, p
         if not get_raw_result:
             return self.label_dict[m_arg]
+
         return m_probability
 
     def _transfer(self,X):

@@ -41,7 +41,7 @@ class MergedNB(NativaBsyes):
         self._mutionmial._x,self._mutionmial._y=x,y
         self._mutionmial._labelled_x,self._mutionmial._labeled_zip=(labell_x,list(zip(labels,labell_x)))
         self._mutionmial._cat_counter=cat_conter
-        self._mutionmial._feat_dics=[_dics for i ,_dics in enumerate(features) if self._whether_discrete[i]]
+        self._mutionmial._feat_dics=[{_dics:i for i ,_dics in enumerate(feat) }for j,feat in enumerate(features) if self._whether_discrete[j]]
         self._mutionmial._n_possibilities=[len(feats) for i,feats in enumerate(features) if self._whether_discrete[i]]
 
         self._mutionmial.label_dict=label_dics
@@ -63,11 +63,16 @@ class MergedNB(NativaBsyes):
         def func(input_x, tar_category):
             input_x = np.asarray(input_x)
             return discrete_func(
+                # [input_x[i] for i, j in enumerate(self._whether_discrete) if j], tar_category) * continuous_func(
+                # [input_x[i] for i, j in enumerate(self._whether_continus) if j] ,tar_category) / p_category[tar_category]
+
                 input_x[self._whether_discrete].astype(np.int), tar_category) * continuous_func(
                 input_x[self._whether_continus], tar_category) / p_category[tar_category]
         return func
-    def _transfer_x(self, x):
-        feat_dicts = self._mutionmial["_feat_dics"]
+
+
+    def _transfer(self, x):
+        feat_dicts = self._mutionmial["feat_dics"]
         idx = 0
         for d, discrete in enumerate(self._whether_discrete):
             if not discrete:
@@ -80,24 +85,6 @@ class MergedNB(NativaBsyes):
 if __name__ == '__main__':
     import time
 
-    # whether_discrete = [True, False, True, True]
-    # x = DataUtil.get_dataset("balloon2.0", "../../_Data/{}.txt".format("balloon2.0"))
-    # y = [xx.pop() for xx in x]
-    # learning_time = time.time()
-    # nb = MergedNB(whether_discrete)
-    # nb.fit(x, y)
-    # learning_time = time.time() - learning_time
-    # estimation_time = time.time()
-    # nb.evaluate(x, y)
-    # estimation_time = time.time() - estimation_time
-    # print(
-    #     "Model building  : {:12.6} s\n"
-    #     "Estimation      : {:12.6} s\n"
-    #     "Total           : {:12.6} s".format(
-    #         learning_time, estimation_time,
-    #         learning_time + estimation_time
-    #     )
-    # )
 
     whether_continuous = [False] * 16
     continuous_lst = [0, 5, 9, 11, 12, 13, 14]
@@ -114,6 +101,7 @@ if __name__ == '__main__':
     nb1.fit(x_train, y_train)
     learning_time = time.time() - learning_time
     estimation_time = time.time()
+    print(learning_time)
     nb1.evaluate(x_train, y_train)
     nb1.evaluate(x_test, y_test)
     estimation_time = time.time() - estimation_time
